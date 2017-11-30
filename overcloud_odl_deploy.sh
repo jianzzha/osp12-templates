@@ -16,9 +16,15 @@ openstack overcloud deploy \
 -r $PWD/roles_data.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/host-config-and-reboot.yaml \
--e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ovs-dpdk.yaml \
--e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-opendaylight.yaml \
+-e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-dpdk.yaml \
 -e /home/stack/odl_registry.yaml \
 -e $PWD/network-environment.yaml \
 --ntp-server clock.redhat.com
+
+[ $? -eq 0 ] || exit 1
+echo "build nodes inventory file"
+echo "[computes]" > nodes
+nova list | sed -n -r 's/.*compute.*ctlplane=([.0-9]+).*/\1/ p' >> nodes
+echo "[controllers]" >> nodes
+nova list | sed -n -r 's/.*control.*ctlplane=([.0-9]+).*/\1/ p' >> nodes
 

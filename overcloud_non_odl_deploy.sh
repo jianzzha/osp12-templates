@@ -19,5 +19,13 @@ openstack overcloud deploy \
 -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ovs-dpdk.yaml \
 -e /home/stack/docker_registry.yaml \
 -e $PWD/network-environment.yaml \
---ntp-server clock.redhat.com
+--ntp-server clock.redhat.com \
+--log-file overcloud_install.log &> overcloud_install.log
+
+[ $? -eq 0 ] || exit 1
+echo "build nodes inventory file"
+echo "[computes]" > nodes
+nova list | sed -n -r 's/.*compute.*ctlplane=([.0-9]+).*/\1/ p' >> nodes
+echo "[controllers]" >> nodes
+nova list | sed -n -r 's/.*control.*ctlplane=([.0-9]+).*/\1/ p' >> nodes
 
