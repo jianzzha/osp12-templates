@@ -38,12 +38,12 @@ parameter_defaults:
   NeutronNetworkVLANRanges: 'dpdk0:100:200,dpdk1:100:200,access:100:200'
   NeutronFlatNetworks: '*'
   # Nova flavor to use.
-  #OvercloudControlFlavor: baremetal
-  #OvercloudComputeFlavor: baremetal
-  OvercloudCephStorageFlavor: ceph-storage 
-  OvercloudSwiftStorageFlavor: swift-storage
-  OvercloudControlFlavor: control
-  OvercloudComputeOvsDpdkFlavor: compute
+  OvercloudControlFlavor: baremetal
+  OvercloudComputeFlavor: baremetal
+  #OvercloudCephStorageFlavor: ceph-storage 
+  #OvercloudSwiftStorageFlavor: swift-storage
+  #OvercloudControlFlavor: control
+  #OvercloudComputeOvsDpdkFlavor: compute
   #Number of nodes to deploy.
   ControllerCount: 1
   ComputeOvsDpdkCount: 1
@@ -55,10 +55,10 @@ parameter_defaults:
   ComputeHostnameFormat: 'compute-%index%'
   CephStorageHostnameFormat: 'ceph-%index%'
   ObjectStorageHostnameFormat: 'swift-%index%'
-  #ControllerSchedulerHints:
-  #  'capabilities:node': 'controller-%index%'
-  #NovaComputeSchedulerHints:
-  #  'capabilities:node': 'compute-%index%'
+  ControllerSchedulerHints:
+    'capabilities:node': 'controller-%index%'
+  NovaComputeSchedulerHints:
+    'capabilities:node': 'compute-%index%'
   ##########################
   # OVS DPDK configuration #
   # ########################
@@ -67,12 +67,12 @@ parameter_defaults:
     KernelArgs: default_hugepagesz=1GB hugepagesz=1G hugepages=32 iommu=pt intel_iommu=on
     TunedProfileName: "cpu-partitioning"
     IsolCpusList: "2,4,6,8,10,12,14,16,26,28,30,32,34,36,38,40"
-    NovaVcpuPinSet: ['8,10,12,32,34,36']
+    NovaVcpuPinSet: ['8,10,12,14,32,34,36,38']
     NovaReservedHostMemory: 4096
     OvsDpdkSocketMemory: "1024,1024"
     OvsDpdkMemoryChannels: "4"
     OvsDpdkCoreList: "16,40"
-    OvsPmdCoreList: "1,2,4,6,14,3,26,28,30,38"
+    OvsPmdCoreList: "1,2,4,6,3,26,28,30"
   # MTU global configuration
   NeutronGlobalPhysnetMtu: 9000
   # DHCP provide metadata route to VM.

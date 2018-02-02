@@ -16,15 +16,15 @@ openstack overcloud deploy \
 -r $PWD/roles_data.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/host-config-and-reboot.yaml \
+-e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-dpdk.yaml \
--e /home/stack/odl_registry.yaml \
+-e /home/stack/odl_registry_12.0-20180124.1.yaml \
 -e $PWD/network-environment.yaml \
 --ntp-server clock.redhat.com
 
 [ $? -eq 0 ] || exit 1
-echo "build nodes inventory file"
-echo "[computes]" > nodes
-nova list | sed -n -r 's/.*compute.*ctlplane=([.0-9]+).*/\1/ p' >> nodes
-echo "[controllers]" >> nodes
-nova list | sed -n -r 's/.*control.*ctlplane=([.0-9]+).*/\1/ p' >> nodes
-
+echo "modify /etc/hosts entry"
+sudo sed -i -r '/compute/d' /etc/hosts
+sudo sed -i -r '/controller/d' /etc/hosts
+nova list | sed -r -n 's/.*(compute-[0-9]+).*ctlplane=([0-9.]+).*/\2 \1/p' | sudo tee --append /etc/hosts >/dev/null
+nova list | sed -r -n 's/.*(controller-[0-9]+).*ctlplane=([0-9.]+).*/\2 \1/p' | sudo tee --append /etc/hosts >/dev/null
