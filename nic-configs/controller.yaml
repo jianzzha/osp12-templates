@@ -140,19 +140,19 @@ resources:
                 vlan_id: {get_param: StorageMgmtNetworkVlanID}
                 addresses:
                 - ip_netmask: {get_param: StorageMgmtIpSubnet}
-              - type: ovs_user_bridge
+              - type: ovs_bridge
                 name: br-link0
                 use_dhcp: false
                 members:
                 - type: interface
                   name: em1
-              - type: ovs_user_bridge
+              - type: ovs_bridge
                 name: br-link1
                 use_dhcp: false
                 members:
                 - type: interface
                   name: em2
-              - type: ovs_user_bridge
+              - type: ovs_bridge 
                 name: br-p2p1
                 use_dhcp: false
                 members:
