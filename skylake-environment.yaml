@@ -1,6 +1,6 @@
 resource_registry:
   # Specify the relative/absolute path to the config files you want to use for override the default.
-  OS::TripleO::ComputeOvsDpdk::Net::SoftwareConfig: nic-configs/computeovsdpdk.yaml
+  OS::TripleO::ComputeOvsDpdk::Net::SoftwareConfig: nic-configs/skylake.yaml
   OS::TripleO::Controller::Net::SoftwareConfig: nic-configs/controller.yaml
   OS::TripleO::NodeExtraConfigPost: post-install.yaml
 
@@ -26,7 +26,6 @@ parameter_defaults:
   EC2MetadataIp: 192.168.24.1
   # Define the DNS servers (maximum 2) for the overcloud nodes
   DnsServers: ["10.35.28.28","8.8.8.8"]
-  HostAllowedNetworkTypes: ['local', 'flat', 'vlan', 'vxlan', 'gre']
   # May set to br-ex if using floating IPs only on native VLAN on bridge br-ex
   NeutronExternalNetworkBridge: "''"
   # The tunnel type for the tenant network (vxlan or gre). Set to '' to disable tunneling.
@@ -60,21 +59,21 @@ parameter_defaults:
   ControllerSchedulerHints:
     'capabilities:node': 'controller-%index%'
   ComputeOvsDpdkSchedulerHints:
-    'capabilities:node': 'compute-%index%'
+    'capabilities:node': 'skylake-%index%'
   ##########################
   # OVS DPDK configuration #
   # ########################
   ComputeOvsDpdkParameters:
     OvsEnableDpdk: True
-    KernelArgs: default_hugepagesz=1GB hugepagesz=1G hugepages=32 iommu=pt intel_iommu=on isolcpus=2,4,6,8,10,12,14,16,26,28,30,32,34,36,38,40
+    KernelArgs: default_hugepagesz=1GB hugepagesz=1G hugepages=32 iommu=pt intel_iommu=on isolcpus=2,4,6,8,10,12,14,16,18,26,28,30,32,34,36,38,40,42
     TunedProfileName: "cpu-partitioning"
-    IsolCpusList: "2,4,6,8,10,12,14,16,26,28,30,32,34,36,38,40"
+    IsolCpusList: "2,4,6,8,10,12,14,16,18,26,28,30,32,34,36,38,40,42"
     NovaVcpuPinSet: ['8,10,12,14,32,34,36,38']
     NovaReservedHostMemory: 4096
     OvsDpdkSocketMemory: "1024,1024"
     OvsDpdkMemoryChannels: "4"
     OvsDpdkCoreList: "16,40"
-    OvsPmdCoreList: "1,2,4,6,3,26,28,30"
+    OvsPmdCoreList: "2,4,6,18,26,28,30,42"
   # MTU global configuration
   NeutronGlobalPhysnetMtu: 9000
   # DHCP provide metadata route to VM.

@@ -22,16 +22,22 @@ for i in $(seq 600); do
   fi
 done
 
+if ((clean_done == 0)); then
+  echo "node stuck in clean state"
+  exit 1
+fi
+
 # add -e $PWD/disable-telemetry.yaml to disable ceilometry
 # -e /home/stack/docker_registry.yaml
 openstack overcloud deploy \
 --templates \
--r $PWD/roles_data.yaml \
+-r $PWD/roles_skylake.yaml \
+-e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-dpdk.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml \
 -e /usr/share/openstack-tripleo-heat-templates/environments/host-config-and-reboot.yaml \
--e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ovs-dpdk.yaml \
--e /home/stack/env_registry_2018-02-27.4.yaml \
--e $PWD/network-environment.yaml \
+-e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-opendaylight.yaml \
+-e /home/stack/env_odl_registry_2018-02-27.4.yaml \
+-e $PWD/skylake-environment.yaml \
 -e $PWD/disable-telemetry.yaml \
 --ntp-server clock.redhat.com
 

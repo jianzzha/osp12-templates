@@ -103,23 +103,23 @@ resources:
                     get_param: ControlPlaneDefaultRoute
 
               - type: interface 
-                name: p2p2 
+                name: em2 
                 use_dhcp: false
 
               - type: vlan
-                device: p2p2
+                device: em2 
                 use_dhcp: false
                 vlan_id: {get_param: InternalApiNetworkVlanID}
                 addresses:
                 - ip_netmask: {get_param: InternalApiIpSubnet}
               - type: vlan
-                device: p2p2
+                device: em2
                 use_dhcp: false
                 vlan_id: {get_param: TenantNetworkVlanID}
                 addresses:
                 - ip_netmask: {get_param: TenantIpSubnet}
               - type: vlan
-                device: p2p2
+                device: em2
                 use_dhcp: false
                 vlan_id: {get_param: StorageNetworkVlanID}
                 addresses:
@@ -132,7 +132,7 @@ resources:
                   name: dpdk0
                   members: 
                   - type: interface
-                    name: em1
+                    name: p1p1 
               - type: ovs_user_bridge
                 name: br-link1
                 use_dhcp: false
@@ -141,7 +141,7 @@ resources:
                   name: dpdk1
                   members: 
                   - type: interface
-                    name: em2
+                    name: p1p2 
               - type: ovs_user_bridge
                 name: br-access
                 use_dhcp: false
@@ -150,7 +150,7 @@ resources:
                   name: dpdk2
                   members:
                   - type: interface
-                    name: p2p1 
+                    name: em1 
 
 outputs:
   OS::stack_id:
